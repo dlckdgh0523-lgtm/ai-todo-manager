@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Todo Manager
 
-## Getting Started
+자연어로 입력한 할 일을 구조화된 데이터로 변환하고, 사용자별 일정과 할 일 데이터를 안전하게 관리하는 AI 기반 할 일 관리 웹 애플리케이션입니다.
 
-First, run the development server:
+## 프로젝트 소개
+
+이 프로젝트는 "자연어 입력 → 구조화된 할 일 생성 → 사용자별 안전한 데이터 관리" 흐름을 구현하는 것을 목표로 만들었습니다.
+
+단순 메모 앱이 아니라,
+- 자연어 입력을 기반으로 한 할 일 생성 경험
+- 사용자별 데이터 분리
+- 일정, 우선순위, 카테고리 기반 관리
+- 향후 AI 요약/분석 기능 확장 가능성
+
+을 고려해 설계한 프로젝트입니다.
+
+## 핵심 기능
+
+- 자연어 기반 할 일 입력
+- 제목, 설명, 우선순위, 마감일, 카테고리 구조화
+- 사용자별 할 일 목록 관리
+- 완료 여부 관리
+- Supabase 기반 인증 및 데이터 분리
+- 추후 AI 요약/분석 기능 확장 고려
+
+## 기술 스택
+
+- **Frontend**: Next.js, React, TypeScript
+- **UI**: Tailwind CSS, Radix UI
+- **Backend / BaaS**: Supabase
+- **AI**: Google AI SDK
+- **Validation / Form**: Zod, React Hook Form
+- **Chart / Utilities**: Recharts, date-fns
+
+## 데이터 설계 포인트
+
+이 프로젝트는 사용자 프로필과 할 일 데이터를 분리하여 관리합니다.
+
+- `users`: 인증 사용자와 1:1로 연결되는 프로필 정보
+- `todos`: 사용자별 할 일 데이터
+- `priority`: `high`, `medium`, `low`
+- `category`: 배열 형태로 관리
+- `completed`: 완료 상태 관리
+
+또한 RLS(Row Level Security)를 적용하는 구조를 전제로 하여,
+사용자가 자신의 데이터만 조회/수정/삭제할 수 있도록 설계했습니다.
+
+## 내가 집중한 부분
+
+- 자연어 입력 결과를 구조화된 할 일 형태로 다루기 위한 데이터 모델 설계
+- Supabase 스키마와 권한 정책 분리
+- 사용자별 데이터 접근 제어
+- AI 기능을 붙일 수 있는 확장 가능한 UI 구조 구성
+
+## 기술적 고민
+
+### 1. 단순 문자열 저장이 아니라 구조화된 할 일로 다루기
+사용자 입력을 그대로 저장하는 방식이 아니라,
+제목 / 설명 / 우선순위 / 카테고리 / 마감일로 나눌 수 있는 구조를 먼저 설계했습니다.
+
+### 2. 사용자 데이터 격리
+다중 사용자 환경을 고려해 user_id 기반 연결과 RLS 정책을 전제로 스키마를 구성했습니다.
+
+### 3. 확장성
+초기 기능은 할 일 관리지만, 이후 AI 요약 / 주간 분석 / 일정 추천 기능까지 붙일 수 있도록 범용적인 구조를 목표로 했습니다.
+
+## 아쉬운 점
+
+- 자연어 파싱 결과 품질을 더 높일 필요가 있습니다.
+- 실제 배포 환경 기준의 인증 플로우와 예외 처리 보강이 필요합니다.
+- 테스트 코드와 문서화를 더 보완할 예정입니다.
+
+## 향후 개선 계획
+
+- AI 일일/주간 요약 기능 추가
+- 반복 일정 기능
+- 캘린더 연동
+- 우선순위 자동 추천
+- 알림 기능 추가
+- 통계 대시보드 고도화
+
+## 프로젝트 구조
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+app/
+components/
+docs/
+hooks/
+lib/
+public/
+types/
+schema.sql
